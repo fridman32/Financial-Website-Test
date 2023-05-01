@@ -1,10 +1,14 @@
 {
   "version": 2,
-  "dgSpecHash": "AY1CURkBFF5efM4sEPpVC+GpYMJ4rYM/aGTW4C/t/fsureSCY9kau006NhybWLhJvDCvdpeDb2b3WXWKC++JgQ==",
+  "dgSpecHash": "VMw6K3G5eM2m08ter4YyboPyqyu7NDAL5jeki6nPjn0MjBMinjFw+YIU+wfzemdM/X3qlG1ZeZckwLaXYzF8iA==",
   "success": true,
   "projectFilePath": "C:\\Users\\Administrator\\source\\repos\\Financial-Website-Test\\WebApplication1\\WebApplication1\\WebApplication1.csproj",
   "expectedPackageFiles": [
-    "C:\\Users\\Administrator\\.nuget\\packages\\newtonsoft.json\\13.0.3\\newtonsoft.json.13.0.3.nupkg.sha512"
+    "C:\\Users\\Administrator\\.nuget\\packages\\newtonsoft.json\\13.0.3\\newtonsoft.json.13.0.3.nupkg.sha512",
+    "C:\\Users\\Administrator\\.nuget\\packages\\microsoft.windowsdesktop.app.ref\\6.0.16\\microsoft.windowsdesktop.app.ref.6.0.16.nupkg.sha512",
+    "C:\\Users\\Administrator\\.nuget\\packages\\microsoft.netcore.app.ref\\6.0.16\\microsoft.netcore.app.ref.6.0.16.nupkg.sha512",
+    "C:\\Users\\Administrator\\.nuget\\packages\\microsoft.aspnetcore.app.ref\\6.0.16\\microsoft.aspnetcore.app.ref.6.0.16.nupkg.sha512",
+    "C:\\Users\\Administrator\\.nuget\\packages\\microsoft.netcore.app.host.win-x64\\6.0.16\\microsoft.netcore.app.host.win-x64.6.0.16.nupkg.sha512"
   ],
   "logs": []
 }

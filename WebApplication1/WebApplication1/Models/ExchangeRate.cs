@@ -2,8 +2,8 @@
 {
     public class ExchangeRate
     {
-        public string FromCurrency { get; set; }
-        public string ToCurrency { get; set; }
-        public decimal Rate { get; set; }
+        public string Name { get; set; }
+        public DateTimeOffset LastUpdated { get; set; }
+        public decimal Rate { get; set; }   
     }
 }

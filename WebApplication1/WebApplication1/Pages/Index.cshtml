@@ -24,8 +24,8 @@
     @foreach (var exchangeRate in Model.ExchangeRates)
     {
         <tr>
-            <td>@exchangeRate.FromCurrency </td>
-            <td>@exchangeRate.ToCurrency </td>
+            <td>@exchangeRate.Name </td>
+            <td>@exchangeRate.LastUpdated.ToString("yyyy-MM-dd HH:mm:ss") </td>
             <td>@exchangeRate.Rate</td>
         </tr>
     }
