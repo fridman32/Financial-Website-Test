@@ -4,7 +4,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorPages();
-builder.Services.AddScoped<IExchangeRates, ExchangeRates>();
+builder.Services.AddSingleton<IExchangeRates, ExchangeRates>();
 
 var app = builder.Build();
 

@@ -12,16 +12,20 @@ using WebApplication1.Services;
 
 public class ExchangeRates : IExchangeRates
 {
-    //private readonly string ApiKey = Environment.GetEnvironmentVariable("OpenExchangeRatesApiKey");6c6de117ab74498caec1adb938e51e22
-    private readonly string ApiKey = "6c6de117ab74498caec1adb938e51e22";
-    private readonly string exchangeRatesFilePath = "C:\\Users\\Administrator\\OneDrive\\שולחן העבודה\\data.txt";
-    private const string BaseUrl = "https://openexchangerates.org/api/latest.json";
+    private readonly string ApiKey;
+    private readonly string exchangeRatesFilePath;
+    private readonly string BaseUrl;
 
     private readonly IContext _context;
+    private readonly IConfiguration _configuration;
 
-    public ExchangeRates(IContext context)
+    public ExchangeRates(IContext context, IConfiguration configuration)
     {
         _context = context;
+        _configuration = configuration;
+        ApiKey = _configuration.GetValue<string>("OpenExchangeRatesApiKey");
+        exchangeRatesFilePath = _configuration.GetValue<string>("OpenExchangeRatesApiKey");
+        BaseUrl = _configuration.GetValue<string>("OpenExchangeRatesApiKey");
     }
 
     public async Task<List<ExchangeRate>> GetExchangeRatesAsync()
