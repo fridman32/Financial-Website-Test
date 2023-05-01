@@ -1,0 +1,37 @@
+﻿@*@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Home page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Welcome</h1>
+    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">AAAAשששששAA</a>.</p>
+</div>
+*@
+
+@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Exchange Rates";
+}
+<h1>Exchange Rates</h1>
+<table>
+    <tr>
+        <th>Currency</th>
+        <th>Rate</th>
+    </tr>
+    @foreach (var exchangeRate in Model.ExchangeRates)
+    {
+        <tr>
+            <td>@exchangeRate.FromCurrency </td>
+            <td>@exchangeRate.ToCurrency </td>
+            <td>@exchangeRate.Rate</td>
+        </tr>
+    }
+</table>
+<script>
+    setInterval(function () {
+        location.reload();
+    }, 5000); // Refresh the page every 5 seconds
+</script>
