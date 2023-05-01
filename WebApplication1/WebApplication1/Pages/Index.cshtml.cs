@@ -30,7 +30,8 @@ namespace WebApplication1.Pages
 
         public async Task OnGetAsync()
         {
-            ExchangeRates = await _exchangeRates.GetExchangeRatesAsync();
+            _exchangeRates.FetchExchangeRates(); //save data to file
+            ExchangeRates = await _exchangeRates.GetExchangeRatesAsync(); //get the data from file
         }
 
     }

@@ -18,6 +18,16 @@ public class ExchangeRates : IExchangeRates
 
     public async Task<List<ExchangeRate>> GetExchangeRatesAsync()
     {
+        // exchangeRates = new List<ExchangeRate>();
+
+        var exchangeRates = LoadExchangeRatesFromFile(exchangeRatesFilePath);
+
+        return exchangeRates;
+    }
+
+    public async void FetchExchangeRates()
+    {
+
         var exchangeRates = new List<ExchangeRate>();
 
         using (var httpClient = new HttpClient())
@@ -26,7 +36,8 @@ public class ExchangeRates : IExchangeRates
             var response = await httpClient.GetAsync($"?app_id={ApiKey}&nocache=true");
             if (!response.IsSuccessStatusCode)
             {
-                return null;
+                // return null;
+                Console.WriteLine("failed to fetch data");
             }
 
             var json = await response.Content.ReadAsStringAsync();
@@ -75,9 +86,7 @@ public class ExchangeRates : IExchangeRates
 
             SaveExchangeRatesToFile(exchangeRates, exchangeRatesFilePath);
 
-            return exchangeRates;
         }
-
     }
 
     private static void SaveExchangeRatesToFile(List<ExchangeRate> exchangeRates, string filePath)
