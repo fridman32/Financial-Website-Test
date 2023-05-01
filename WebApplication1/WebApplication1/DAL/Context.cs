@@ -3,9 +3,9 @@ using WebApplication1.Models;
 
 namespace WebApplication1.DAL
 {
-    public class Context
+    public class Context : IContext
     {
-        private static void SaveExchangeRatesToFile(List<ExchangeRate> exchangeRates, string filePath)
+        public void SaveExchangeRatesToFile(List<ExchangeRate> exchangeRates, string filePath)
         {
             using (var file = File.CreateText(filePath))
             {
@@ -14,7 +14,7 @@ namespace WebApplication1.DAL
             }
         }
 
-        private static List<ExchangeRate> LoadExchangeRatesFromFile(string filePath)
+        public List<ExchangeRate> LoadExchangeRatesFromFile(string filePath)
         {
             using (var file = File.OpenText(filePath))
             {

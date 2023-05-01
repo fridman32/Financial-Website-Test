@@ -8,6 +8,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using WebApplication1.DAL;
 using WebApplication1.Models;
+using WebApplication1.Repositories;
 using WebApplication1.Services;
 
 public class ExchangeRates : IExchangeRates
@@ -16,21 +17,22 @@ public class ExchangeRates : IExchangeRates
     private readonly string exchangeRatesFilePath;
     private readonly string BaseUrl;
 
-    private readonly IContext _context;
+    private readonly IExchangeRepository _exchangeRepository;
     private readonly IConfiguration _configuration;
 
-    public ExchangeRates(IContext context, IConfiguration configuration)
+    public ExchangeRates(IExchangeRepository exchangeRepository, IConfiguration configuration)
     {
-        _context = context;
+        _exchangeRepository = exchangeRepository;
         _configuration = configuration;
         ApiKey = _configuration.GetValue<string>("OpenExchangeRatesApiKey");
-        exchangeRatesFilePath = _configuration.GetValue<string>("OpenExchangeRatesApiKey");
-        BaseUrl = _configuration.GetValue<string>("OpenExchangeRatesApiKey");
+        exchangeRatesFilePath = _configuration.GetValue<string>("exchangeRatesFilePath");
+        BaseUrl = _configuration.GetValue<string>("BaseUrl");
     }
 
     public async Task<List<ExchangeRate>> GetExchangeRatesAsync()
     {
-        var exchangeRates = _context.LoadExchangeRatesFromFile(exchangeRatesFilePath);
+        var exchangeRates = _exchangeRepository.LoadData(exchangeRatesFilePath);
+        Console.WriteLine(exchangeRates);
         return exchangeRates;
     }
 
@@ -54,12 +56,12 @@ public class ExchangeRates : IExchangeRates
             // add the ExchangeRate objects to the list
             List<ExchangeRate> rates = CreateExchangeRateList(data);
 
-            _context.SaveExchangeRatesToFile(exchangeRates, exchangeRatesFilePath);
+            _exchangeRepository.SaveData(exchangeRates, exchangeRatesFilePath);
 
         }
     }
 
-    private List<ExchangeRate> CreateExchangeRateList(dynamic data)
+    private List<ExchangeRate> CreateExchangeRateList(ExchangeRateData data)
     {
         var exchangeRates = new List<ExchangeRate>();
 
