@@ -9,6 +9,8 @@ builder.Services.AddRazorPages();
 builder.Services.AddScoped<IExchangeRates, ExchangeRates>();
 builder.Services.AddScoped<IExchangeRepository, ExchangeRepository>();
 builder.Services.AddScoped<IContext, Context>();
+builder.Services.AddScoped<IAPIInterface<XeCurrencyDataAPI>, XeCurrencyDataAPI>();
+builder.Services.AddScoped<IAPIInterface<OpenExchangeRatesAPI>, OpenExchangeRatesAPI>();
 
 
 var app = builder.Build();

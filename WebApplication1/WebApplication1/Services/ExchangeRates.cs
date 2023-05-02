@@ -13,23 +13,20 @@ using WebApplication1.Services;
 
 public class ExchangeRates : IExchangeRates
 {
-    private readonly string ApiKey;
     private readonly string exchangeRatesFilePath;
-    private readonly string BaseUrl;
-    private readonly string BackUpUrl;
-    
-
     private readonly IExchangeRepository _exchangeRepository;
     private readonly IConfiguration _configuration;
+    private readonly IAPIInterface<XeCurrencyDataAPI> _xeCurrencyDataAPI;
+    private readonly IAPIInterface<OpenExchangeRatesAPI> _openExchangeRatesAPI;
 
-    public ExchangeRates(IExchangeRepository exchangeRepository, IConfiguration configuration)
+
+    public ExchangeRates(IExchangeRepository exchangeRepository, IConfiguration configuration, IAPIInterface<XeCurrencyDataAPI> xeCurrencyDataApi, IAPIInterface<OpenExchangeRatesAPI> openExchangeRatesApi)
     {
         _exchangeRepository = exchangeRepository;
         _configuration = configuration;
-        ApiKey = _configuration.GetValue<string>("OpenExchangeRatesApiKey");
         exchangeRatesFilePath = _configuration.GetValue<string>("exchangeRatesFilePath");
-        BaseUrl = _configuration.GetValue<string>("BaseUrl");
-        BackUpUrl = _configuration.GetValue<string>("BackUpUrl");   
+        _xeCurrencyDataAPI = xeCurrencyDataApi;
+        _openExchangeRatesAPI = openExchangeRatesApi;
     }
 
     public async Task<List<ExchangeRate>> GetExchangeRatesAsync()
@@ -41,11 +38,11 @@ public class ExchangeRates : IExchangeRates
 
     public async Task FetchExchangeRates()
     {
-        var response = GetDataFromAPI(BaseUrl + $"?app_id={ApiKey}&nocache=true", "");
+        var response = _openExchangeRatesAPI.GetDataFromAPI();
 
         if (!response.Result.IsSuccessStatusCode)
         {
-            response = GetDataFromAPI(BackUpUrl, "");
+            response = _xeCurrencyDataAPI.GetDataFromAPI();
         }
 
         var json = await response.Result.Content.ReadAsStringAsync();
@@ -57,15 +54,6 @@ public class ExchangeRates : IExchangeRates
         _exchangeRepository.SaveData(rates, exchangeRatesFilePath);
 
 
-    }
-
-    private async Task<HttpResponseMessage> GetDataFromAPI(string url, string apiKey)
-    {
-        using (var httpClient = new HttpClient())
-        {
-            var response = await httpClient.GetAsync(url);
-            return response;
-        }
     }
 
     private List<ExchangeRate> CreateExchangeRateList(ExchangeRateData data)
