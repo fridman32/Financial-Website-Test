@@ -16,6 +16,8 @@ public class ExchangeRates : IExchangeRates
     private readonly string ApiKey;
     private readonly string exchangeRatesFilePath;
     private readonly string BaseUrl;
+    private readonly string BackUpUrl;
+    
 
     private readonly IExchangeRepository _exchangeRepository;
     private readonly IConfiguration _configuration;
@@ -27,6 +29,7 @@ public class ExchangeRates : IExchangeRates
         ApiKey = _configuration.GetValue<string>("OpenExchangeRatesApiKey");
         exchangeRatesFilePath = _configuration.GetValue<string>("exchangeRatesFilePath");
         BaseUrl = _configuration.GetValue<string>("BaseUrl");
+        BackUpUrl = _configuration.GetValue<string>("BackUpUrl");   
     }
 
     public async Task<List<ExchangeRate>> GetExchangeRatesAsync()
@@ -36,28 +39,32 @@ public class ExchangeRates : IExchangeRates
         return exchangeRates;
     }
 
-    public async void FetchExchangeRates()
+    public async Task FetchExchangeRates()
     {
-        var exchangeRates = new List<ExchangeRate>();
+        var response = GetDataFromAPI(BaseUrl + $"?app_id={ApiKey}&nocache=true", "");
 
+        if (!response.Result.IsSuccessStatusCode)
+        {
+            response = GetDataFromAPI(BackUpUrl, "");
+        }
+
+        var json = await response.Result.Content.ReadAsStringAsync();
+        var data = JsonConvert.DeserializeObject<ExchangeRateData>(json);
+
+        // add the ExchangeRate objects to the list
+        List<ExchangeRate> rates = CreateExchangeRateList(data);
+
+        _exchangeRepository.SaveData(rates, exchangeRatesFilePath);
+
+
+    }
+
+    private async Task<HttpResponseMessage> GetDataFromAPI(string url, string apiKey)
+    {
         using (var httpClient = new HttpClient())
         {
-            httpClient.BaseAddress = new Uri(BaseUrl);
-            var response = await httpClient.GetAsync($"?app_id={ApiKey}&nocache=true");
-            if (!response.IsSuccessStatusCode)
-            {
-                // return null;
-                Console.WriteLine("failed to fetch data");
-            }
-
-            var json = await response.Content.ReadAsStringAsync();
-            var data = JsonConvert.DeserializeObject<ExchangeRateData>(json);
-
-            // add the ExchangeRate objects to the list
-            List<ExchangeRate> rates = CreateExchangeRateList(data);
-
-            _exchangeRepository.SaveData(exchangeRates, exchangeRatesFilePath);
-
+            var response = await httpClient.GetAsync(url);
+            return response;
         }
     }
 
@@ -68,28 +75,28 @@ public class ExchangeRates : IExchangeRates
         var usdIlsRate = new ExchangeRate
         {
             Name = "USD/ILS",
-            LastUpdated = DateTimeOffset.FromUnixTimeSeconds(data.date),
+            LastUpdated = DateTime.UtcNow,
             Rate = data.Rates["ILS"] / data.Rates["USD"]
         };
 
         var gbpEurRate = new ExchangeRate
         {
             Name = "GBP/EUR",
-            LastUpdated = DateTimeOffset.FromUnixTimeSeconds(data.date),
+            LastUpdated = DateTime.UtcNow,
             Rate = data.Rates["EUR"] / data.Rates["GBP"]
         };
 
         var eurJpyRate = new ExchangeRate
         {
             Name = "EUR/JPY",
-            LastUpdated = DateTimeOffset.FromUnixTimeSeconds(data.date),
+            LastUpdated = DateTime.UtcNow,
             Rate = data.Rates["JPY"] / data.Rates["EUR"]
         };
 
         var eurUsdRate = new ExchangeRate
         {
             Name = "EUR/USD",
-            LastUpdated = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddSeconds(data.date),
+            LastUpdated = DateTime.UtcNow,
             Rate = data.Rates["USD"] / data.Rates["EUR"]
         };
 
