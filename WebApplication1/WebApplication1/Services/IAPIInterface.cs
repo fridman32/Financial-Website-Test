@@ -1,7 +1,9 @@
-﻿namespace WebApplication1.Services
+﻿using WebApplication1.Models;
+
+namespace WebApplication1.Services
 {
     public interface IAPIInterface<T>
     {
-        Task<HttpResponseMessage> GetDataFromAPI();
+        Task<List<ExchangeRate>> GetDataFromAPI();
     }
 }

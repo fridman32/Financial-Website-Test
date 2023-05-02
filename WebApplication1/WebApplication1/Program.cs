@@ -6,7 +6,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorPages();
-builder.Services.AddScoped<IExchangeRates, ExchangeRates>();
+builder.Services.AddScoped<IExchangeRates, ExchangeRatesService>();
 builder.Services.AddScoped<IExchangeRepository, ExchangeRepository>();
 builder.Services.AddScoped<IContext, Context>();
 builder.Services.AddScoped<IAPIInterface<XeCurrencyDataAPI>, XeCurrencyDataAPI>();

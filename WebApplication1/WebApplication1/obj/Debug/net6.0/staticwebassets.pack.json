@@ -5,6 +5,10 @@
       "PackagePath": "staticwebassets\\WebApplication1.bundle.scp.css"
     },
     {
+      "Id": "C:\\Users\\Administrator\\source\\repos\\Financial-Website-Test\\WebApplication1\\WebApplication1\\wwwroot\\Log.txt",
+      "PackagePath": "staticwebassets\\Log.txt"
+    },
+    {
       "Id": "C:\\Users\\Administrator\\source\\repos\\Financial-Website-Test\\WebApplication1\\WebApplication1\\wwwroot\\css\\site.css",
       "PackagePath": "staticwebassets\\css\\site.css"
     },
